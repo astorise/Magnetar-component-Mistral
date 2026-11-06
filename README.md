@@ -18,6 +18,17 @@ no Mistral implementation of its own either. It is pinned into Magnetar as a
 placeholder so the work has a home; it is not yet scheduled against an
 OpenSpec change of its own.
 
+## Mistral 7B today
+
+Mistral 7B v0.2/v0.3 has no sliding window and is exactly the Llama
+decoder block, and llama.cpp's GGUF exports of it declare
+`general.architecture = llama`. Such a file is therefore served by
+`components/llama`, through `loaders/gguf` (which restores llama.cpp's
+query/key row permutation and rebuilds its SentencePiece tokenizer):
+Mistral-7B-Instruct-v0.3 `Q8_0` is qualified that way on CUDA. This
+Component is for what the `mistral` family (Hugging Face `model_type`)
+adds beyond that block.
+
 ## What this family needs
 
 What sets this family apart from the generic decoder block
