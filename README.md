@@ -12,11 +12,18 @@ or Devices).
 
 ## Status
 
-**Empty template.** This crate is a scaffold: no Mistral graph logic, no WIT
-bindings and no Component Model exports exist here yet, and the Runtime has
-no Mistral implementation of its own either. It is pinned into Magnetar as a
-placeholder so the work has a home; it is not yet scheduled against an
-OpenSpec change of its own.
+The initial dense Mistral graph builder covers prefill, cached decode and
+layer segments, including sliding-window or full attention. It implements the
+pre-norm attention and pre-norm SiLU-gated MLP ordering. Graph tests exercise
+the pinned Mistral 7B v0.1 configuration and reject unsupported inputs.
+
+**Inference is not available yet.** WIT entrypoints deliberately fail closed:
+Magnetar cannot yet report a checkpoint's configurable `hidden_act`
+([#217](https://github.com/astorise/Magnetar/issues/217)) and drops the
+checkpoint-wide sliding window when no `layer_types` are specified
+([#218](https://github.com/astorise/Magnetar/issues/218)). Tests currently
+inspect graph structure; they do not compare logits or execute the graph on a
+Provider. Mixtral and later variants are not implemented.
 
 ## Mistral 7B today
 
@@ -42,13 +49,9 @@ implemented:
 
 ## Governing contract
 
-None dedicated yet. A real implementation will target the same
-`model-component-graph-contract` WIT interface (`magnetar:model-component-graph`)
-`components/qwen` and `components/llama` implement, extended additively
-where this family needs Operators or state the contract does not model yet.
-Family-specific requirements will be scoped in the main repository's
-`openspec/` (the `qualify-additional-model-and-state-families` change tracks
-qualifying new families).
+The graph adapter targets `magnetar:model-component-graph@1.7.0`. It must remain
+fail-closed until #217 and #218 are resolved; afterwards it still needs real
+loading and reference-logit comparisons across the sliding-window boundary.
 
 ## Relationship to magnetar-runtime
 
