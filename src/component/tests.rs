@@ -1,8 +1,9 @@
-use super::require_checkpoint_contracts;
+use super::validate_activation;
 
 #[test]
-fn refuses_to_build_when_activation_and_uniform_window_are_not_exposed() {
-    let error = require_checkpoint_contracts().unwrap_err();
-    assert!(error.contains("#217"));
-    assert!(error.contains("#218"));
+fn requires_the_supported_declared_activation() {
+    assert_eq!(validate_activation(Some("silu".into())).unwrap(), "silu");
+    assert!(validate_activation(None).is_err());
+    assert!(validate_activation(Some("gelu".into())).is_err());
+    assert!(validate_activation(Some("".into())).is_err());
 }

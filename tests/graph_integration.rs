@@ -209,6 +209,14 @@ fn middle_segments_use_hidden_state_and_tied_final_segment_aliases_embedding() {
     let mut sink = RecordingSink::default();
     build_graph(&mut sink, &cfg, segment(Phase::Decode, 1, 2)).unwrap();
     assert_eq!(sink.begin, Some((Phase::Decode, 1, 11)));
+    assert_eq!(
+        attr(sink.node("layer1.rope_q"), "position_offset"),
+        Some(&Value::Int(11))
+    );
+    assert_eq!(
+        attr(sink.node("layer1.rope_k"), "position_offset"),
+        Some(&Value::Int(11))
+    );
     assert_eq!(sink.inputs, ["hidden_states_in"]);
     assert_eq!(sink.output.as_deref(), Some("out:layer1.residual2"));
     let mut last = RecordingSink::default();

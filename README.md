@@ -17,13 +17,12 @@ layer segments, including sliding-window or full attention. It implements the
 pre-norm attention and pre-norm SiLU-gated MLP ordering. Graph tests exercise
 the pinned Mistral 7B v0.1 configuration and reject unsupported inputs.
 
-**Inference is not available yet.** WIT entrypoints deliberately fail closed:
-Magnetar cannot yet report a checkpoint's configurable `hidden_act`
-([#217](https://github.com/astorise/Magnetar/issues/217)) and drops the
-checkpoint-wide sliding window when no `layer_types` are specified
-([#218](https://github.com/astorise/Magnetar/issues/218)). Tests currently
-inspect graph structure; they do not compare logits or execute the graph on a
-Provider. Mixtral and later variants are not implemented.
+The WIT entrypoints require the Runtime to supply a verified `silu` activation
+and preserve the configured per-layer attention windows. Missing or different
+activations are refused. The Magnetar repository includes tiny numerical
+fixtures for full and sliding attention; real Mistral checkpoints and GPU
+execution have not yet been qualified with this Component. Mixtral and later
+variants are not implemented.
 
 ## Mistral 7B today
 
@@ -49,9 +48,8 @@ implemented:
 
 ## Governing contract
 
-The graph adapter targets `magnetar:model-component-graph@1.7.0`. It must remain
-fail-closed until #217 and #218 are resolved; afterwards it still needs real
-loading and reference-logit comparisons across the sliding-window boundary.
+The graph adapter targets `magnetar:model-component-graph@1.8.0` and requires
+the `hidden-activation` and `layer-layout` capabilities where applicable.
 
 ## Relationship to magnetar-runtime
 

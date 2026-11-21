@@ -81,6 +81,7 @@ fn wit_attr(attr: &Attr) -> gb::Attribute {
 
 fn config() -> Result<Config, String> {
     let a = mc::model_config();
+    let hidden_activation = validate_activation(mc::hidden_activation())?;
     if a.num_hidden_layers == 0 || a.num_hidden_layers > 4096 {
         return Err("invalid or excessive decoder layer count".into());
     }
@@ -143,9 +144,7 @@ fn config() -> Result<Config, String> {
         heads: a.num_attention_heads,
         vocabulary: a.vocabulary_size,
         epsilon: a.rms_norm_eps,
-        // Unreachable through WIT until the activation guard above is replaced
-        // with the checkpoint value supplied by the host (Magnetar #217).
-        hidden_activation: "silu".into(),
+        hidden_activation,
         tie_embeddings: a.tie_word_embeddings,
         layers,
     })
@@ -157,7 +156,6 @@ fn build(
     position_offset: u64,
     range: Option<(u32, u32)>,
 ) -> String {
-    require_checkpoint_contracts().unwrap_or_else(|reason| panic!("mistral: {reason}"));
     let config = config().unwrap_or_else(|reason| panic!("mistral: {reason}"));
     let (start_layer, end_layer) = range.unwrap_or((0, config.layers.len() as u32));
     plan::build_graph(
@@ -174,12 +172,13 @@ fn build(
     .unwrap_or_else(|reason| panic!("mistral: {reason}"))
 }
 
-/// The current contract omits hidden_act and drops uniform sliding-window
-/// metadata. Do not emit an unsafe graph until both issues are resolved.
-fn require_checkpoint_contracts() -> Result<(), &'static str> {
-    Err(
-        "model-config omits hidden_act and uniform sliding windows; blocked by Magnetar issues #217 and #218",
-    )
+/// Refuse a graph unless ingestion established the activation it uses.
+fn validate_activation(value: Option<String>) -> Result<String, String> {
+    match value.as_deref() {
+        Some("silu") => Ok("silu".into()),
+        Some(other) => Err(format!("unsupported checkpoint activation {other:?}")),
+        None => Err("checkpoint activation is unknown".into()),
+    }
 }
 
 struct Component;
