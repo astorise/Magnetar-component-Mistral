@@ -46,6 +46,21 @@ implemented:
 - Mixtral replaces the MLP with a sparse Mixture-of-Experts (top-2 of 8 experts per token), which needs data-dependent routing on the Device (`execute-and-cache-moe-experts`).
 - Later releases (Mistral NeMo, Mistral Small) keep the dense block with a larger, different tokenizer (Tekken), which the Hugging Face and GGUF loaders must ingest.
 
+## Built on magnetar-component-sdk
+
+The graph IR (`Phase`, `KvRole`, `Value`, `Attr`, `Kv`, `Node`), the
+`GraphSink` the builder writes to, and the adapter to the contract's
+`graph-builder` interface come from
+[`magnetar-component-sdk`](https://github.com/astorise/magnetar-component-sdk),
+pinned by commit while the SDK is in development (the crate is published once
+it is stable). `src/plan.rs` re-exports the SDK types and keeps only what is
+specific to Mistral: the configuration, its validation and the graph itself.
+
+`tests/golden/` holds the graphs the builder emits, recorded before it moved
+onto the SDK; `tests/golden_graphs.rs` compares every call against them.
+Regenerate them deliberately with `UPDATE_GOLDEN=1 cargo test --test
+golden_graphs`.
+
 ## Governing contract
 
 The graph adapter targets `magnetar:model-component-graph@1.8.0` and requires

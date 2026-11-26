@@ -16,6 +16,9 @@ rust-version = "1.98"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
+# Pinned to a commit while the SDK is in development; the crate is published
+# once it is stable.
+magnetar-component-sdk = { git = "https://github.com/astorise/magnetar-component-sdk", rev = "4e2e556176f465aa8d271259104de9e2f5aefdfa" }
 wit-bindgen = "0.63"
 
 [features]

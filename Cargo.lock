@@ -92,9 +92,15 @@ dependencies = [
 name = "magnetar-component-mistral"
 version = "0.1.0"
 dependencies = [
+ "magnetar-component-sdk",
  "serde_json",
  "wit-bindgen",
 ]
+
+[[package]]
+name = "magnetar-component-sdk"
+version = "0.1.0"
+source = "git+https://github.com/astorise/magnetar-component-sdk?rev=4e2e556176f465aa8d271259104de9e2f5aefdfa#4e2e556176f465aa8d271259104de9e2f5aefdfa"
 
 [[package]]
 name = "memchr"
