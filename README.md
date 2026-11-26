@@ -66,6 +66,14 @@ golden_graphs`.
 The graph adapter targets `magnetar:model-component-graph@1.8.0` and requires
 the `hidden-activation` and `layer-layout` capabilities where applicable.
 
+The contract comes from
+[`magnetar-component-api`](https://github.com/astorise/magnetar-component-api),
+pinned by commit like the SDK, with the `v1_8` feature: the WIT file and the
+generated bindings are the crate's, and this repository carries no copy of
+either. To target a later version, change the feature and the pinned commit;
+the graphs recorded in `tests/golden/` say whether anything this Component
+emits changed.
+
 ## Relationship to magnetar-runtime
 
 This Component will be loaded and validated by the Runtime's Component
