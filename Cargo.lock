@@ -108,7 +108,7 @@ dependencies = [
 [[package]]
 name = "magnetar-component-sdk"
 version = "0.1.0"
-source = "git+https://github.com/astorise/magnetar-component-sdk?rev=4e2e556176f465aa8d271259104de9e2f5aefdfa#4e2e556176f465aa8d271259104de9e2f5aefdfa"
+source = "git+https://github.com/astorise/magnetar-component-sdk?rev=9918c8a9507b20a7cb456d069bc5b3b8cf5b0bc4#9918c8a9507b20a7cb456d069bc5b3b8cf5b0bc4"
 
 [[package]]
 name = "memchr"
