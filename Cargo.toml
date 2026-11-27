@@ -21,7 +21,7 @@ crate-type = ["cdylib", "rlib"]
 magnetar-component-sdk = { git = "https://github.com/astorise/magnetar-component-sdk", rev = "4e2e556176f465aa8d271259104de9e2f5aefdfa" }
 # The contract: pinned by commit while the crate is in development, and the
 # feature names the contract version this Component targets.
-magnetar-component-api = { git = "https://github.com/astorise/magnetar-component-api", rev = "2383a7479ff496b147e27e294f3190d5209b39d4", features = ["v1_8"] }
+magnetar-component-api = { git = "https://github.com/astorise/magnetar-component-api", rev = "f8fded2553fd381ce96bcda4a6062a1112aad174", features = ["v1_8"] }
 
 [features]
 bindings = []
