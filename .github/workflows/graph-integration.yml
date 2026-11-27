@@ -22,6 +22,6 @@ jobs:
       - name: Build Component Model artifact
         run: cargo +1.100.0 build --locked --release --target wasm32-wasip2
       - name: Install wasm-tools
-        uses: taiki-e/install-action@d270f69d9016a914699316c97c419c84d5e96475 # wasm-tools
+        uses: taiki-e/install-action@39a0b1570a117ededf7f373a25a04e92fa1994b0 # wasm-tools
       - name: Validate Component Model artifact
         run: wasm-tools validate target/wasm32-wasip2/release/magnetar_component_mistral.wasm --features component-model
